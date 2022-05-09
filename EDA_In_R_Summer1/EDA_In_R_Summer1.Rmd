@@ -69,6 +69,7 @@ formattable(head(flights))
 ```{r}
 # What are the properties of the data
 formattable(diagnose(flights))
+diagnose(flights)
 ```
 * `variables`: name of each variable
 * `types`: data type of each variable
@@ -88,6 +89,7 @@ _Credit to Cédric Scherer_
 ##### Numerical variables
 ```{r}
 formattable(diagnose_numeric(flights))
+diagnose_numeric((flights))
 ```
 * `min`: minimum value
 * `Q1`: 1/4 quartile, 25th percentile
@@ -109,18 +111,24 @@ There are several numerical variables that have outliers above, let's see what t
 # Table showing outliers
 formattable(diagnose_outlier(flights) %>%
   filter(outliers_ratio > 0))
+```
 
+```{r}
 # Boxplot and histograms of data with and without outliers (all numerical variables)
 flights %>%           
   plot_outlier()
+```
 
+```{r}
 # Selecting only variables with outliers 
 flights %>%
   plot_outlier(diagnose_outlier(flights) %>% 
                  filter(outliers_ratio > 0) %>% 
                  select(variables) %>% 
                  unlist())
+```
 
+```{r}
 # Selecting desired columns 
 flights %>% 
   select(dep_delay, air_time, arr_delay) %>%
@@ -133,6 +141,7 @@ flights %>%
 #### 2.2 Categorical variables
 ```{r}
 formattable(diagnose_category(flights))
+diagnose_category(flights)
 ```
 * `variables`: category names
 * `levels`: group names within categories
@@ -141,6 +150,11 @@ formattable(diagnose_category(flights))
 * `ratio`: percentage of observation at group level / number of observation at category level
 * `rank`: rank of the occupancy ratio of levels (order in which the groups are in the category)
 
+***Interesting, it looks like the `dlookr::` package converts character vectors into factors for the purposes of diagnosing and plotting, but doesn't alter the original data.***
+
+```{r}
+flights %>% pull(carrier) %>% forcats::as_factor() %>% levels()
+```
 *** 
 
 #### 2.3 Missing values (NAs)
@@ -161,5 +175,5 @@ plot_na_intersect(flights, only_na = TRUE)
 ### 3.0 Produce an HTML summary of a data set
 ```{r}
 # Remove the '#' below to reproduce an HTML from an R script. 
-#diagnose_web_report(flights)
+diagnose_web_report(flights)
 ```
