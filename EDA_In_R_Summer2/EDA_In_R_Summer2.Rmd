@@ -32,7 +32,7 @@ We first need to prepare our environment with the necessary packages
 options(repos = list(CRAN = "http://cran.rstudio.com/"))
 options(digits = 2)
 
-install.packages("pacman")
+# install.packages("pacman")
 
 pacman::p_load(dlookr, # Exploratory data analysis
        formattable, # HTML tables from R outputs
@@ -50,7 +50,7 @@ pacman::p_load(dlookr, # Exploratory data analysis
 data("flights")
 
 # What does the data look like?
-formattable(head(flights))
+flights %>% head() %>% kableExtra::kbl() %>% kableExtra::kable_styling()
 ```
 
 ***
